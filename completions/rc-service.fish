@@ -1,8 +1,4 @@
 function __fish_service_print_names
-	if type -f systemctl >/dev/null
-        command systemctl list-units  -t service | cut -d ' ' -f 1 | grep '\.service$' | sed -e 's/\.service$//'
-    end
-
     command rc-service -l
 end
 
