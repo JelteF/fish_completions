@@ -13,7 +13,7 @@ function __fish_complete_eselect_action_options
     set -l cmdl (commandline -poc)
     set -l findregexp '/^  '$cmdl[3]'/,/^  [^ ]/p'
     set cmdl[3] help
-    eval $cmdl | sed -n -re $findregexp | grep '^    ' | sed -re $parseregexp
+    eval $cmdl | sed -n -re $findregexp | grep '^    --' | sed -re $parseregexp
 end
 
 function __fish_complete_eselect_targets
