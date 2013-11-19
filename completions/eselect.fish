@@ -1,26 +1,41 @@
 function __fish_complete_eselect_modules
     set -l sedregexp 's/^  ([a-zA-Z0-9_-]*)[ ]*/\1\t/g'
-    eselect modules list | grep '^  ' | sed -r $sedregexp
+    eselect --brief modules list | grep '^  ' | sed -r $sedregexp
 end
 
 function __fish_complete_eselect_actions
     set -l sedregexp 's/^  ([a-zA-Z0-9_-]*)[ ]*/\1\t/g'
-    eval (commandline -poc) help | grep '^  [^ -]' | sed -r $sedregexp
+    set -l cmdl (commandline -poc)
+    eval $cmdl[1] --brief $cmdl[2..-1] help | grep '^  [^ -]' | sed -r $sedregexp
 end
 
 function __fish_complete_eselect_action_options
     set -l parseregexp 's/^    ([a-zA-Z0-9_-]*)[ ]*/\1\t/g'
     set -l cmdl (commandline -poc)
-    set -l findregexp '/^  '$cmdl[3]'/,/^  [^ ]/p'
-    set cmdl[3] help
-    eval $cmdl | sed -n -re $findregexp | grep '^    --' | sed -re $parseregexp
+
+    switch $cmdl[-1]
+        case -'*'
+            return
+    end
+
+    set -l findregexp '/^  '$cmdl[-1]'/,/^  [^ ]/p'
+
+    set cmdl[-1] help
+    eval $cmdl[1] --brief $cmdl[2..-1] | sed -n -re $findregexp | grep '^    --' | sed -re $parseregexp
 end
 
 function __fish_complete_eselect_targets
     set -l sedregexp 's/^  \[([0-9]+)\][ ]*/\1\t/g'
     set -l cmdl (commandline -poc)
-    set cmdl[3] list
-    eval $cmdl | grep '^  [^ -]' | sed -r $sedregexp
+
+    switch $cmdl[-1]
+        case -'*'
+            set cmdl[-2] list
+        case '*'
+            set cmdl[-1] list
+    end
+
+    eval $cmdl[1] $cmdl[2..-1] | grep '^  [^ -]' | sed -r $sedregexp
 end
 
 complete -c eselect -n "test (__fish_number_of_cmd_args_wo_opts) = 1" \
