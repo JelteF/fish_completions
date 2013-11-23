@@ -29,6 +29,6 @@ complete -c rc-update -n "test (__fish_number_of_cmd_args_wo_opts) = 1" \
 complete -c rc-update -n "test (__fish_number_of_cmd_args_wo_opts) = 2" \
     -xa "(__fish_print_service_names)" --description "Service name"
 
-# The second argument is the names of the service, i.e. a file in /etc/init.d
+# The third argument is the names of the service, i.e. a file in /etc/init.d
 complete -c rc-update -n "test (__fish_number_of_cmd_args_wo_opts) = 3" \
     -xa "(__fish_complete_rc-update_runlevels)"
